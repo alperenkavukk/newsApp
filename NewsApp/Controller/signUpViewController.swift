@@ -7,11 +7,13 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
+class signUpViewController: UIViewController , UIImagePickerControllerDelegate, UINavigationControllerDelegate{
 
-class signUpViewController: UIViewController {
-
+    @IBOutlet weak var imageViewAdd: UIImageView!
     @IBOutlet weak var emailText: UITextField!
     
+    @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordText: UITextField!
     @IBOutlet weak var signUpbutton: UIButton!
     override func viewDidLoad() {
@@ -22,34 +24,55 @@ class signUpViewController: UIViewController {
         passwordText.layer.cornerRadius = 15
         passwordText.isSecureTextEntry = true
         passwordText.textContentType = .password
+        imageViewAdd.layer.cornerRadius = imageViewAdd.frame.size.width / 3
+        imageViewAdd.clipsToBounds = true
+        
+        imageViewAdd.isUserInteractionEnabled = true
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(chooseImage))
+        imageViewAdd.addGestureRecognizer(gestureRecognizer)
+    }
+    
+    
+    @objc func chooseImage(){
+        let pickercontroller = UIImagePickerController()
+        pickercontroller.delegate = self
+        pickercontroller.sourceType = .photoLibrary
+        present(pickercontroller , animated: true,completion: nil)
         
     }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        imageViewAdd.image = info[.originalImage] as? UIImage
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    
     
     @IBAction func signUpButton(_ sender: Any) {
         
-        if emailText.text != "" && passwordText.text != "" {
-            Auth.auth().createUser(withEmail: emailText.text!, password: passwordText.text!) {
-                authdata , error in
-                if error != nil {
-                    self.makeAlert(titleInput: "Error!", messageInput: error?.localizedDescription ?? "ERROR")
-                }
-                else
-                {
-                    self.performSegue(withIdentifier: "tocustomvc", sender: nil)
-                }
-            }
-        }
-        else {
-            self.makeAlert(titleInput: "Error!", messageInput: "Username/Password")
-        }
+        
+        guard let email = emailText.text, let password = passwordText.text, let username = usernameTextField.text else {
+               return
+           }
+           
+           
+           Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
+               if error == nil {
+                   
+                   let db = Firestore.firestore()
+                   db.collection("users").document(result!.user.uid).setData(["username": username])
+                
+                   self.performSegue(withIdentifier: "tocustomvc", sender: self)
+               } else {
+                   
+                   let alertController = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
+                   let alertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                   alertController.addAction(alertAction)
+                   self.present(alertController, animated: true, completion: nil)
+               }
+           }
         
     }
-    
-    func makeAlert(titleInput:String, messageInput:String) {
-               let alert = UIAlertController(title: titleInput, message: messageInput, preferredStyle: UIAlertController.Style.alert)
-               let okButton = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
-               alert.addAction(okButton)
-               self.present(alert, animated: true, completion: nil)
-          }
-    
+
 }
+

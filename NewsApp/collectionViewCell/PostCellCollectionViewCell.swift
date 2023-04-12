@@ -18,6 +18,19 @@ class PostCellCollectionViewCell: UICollectionViewCell {
         background.layer.cornerRadius = 12
         image.layer.cornerRadius = 12
     }
-    
+    /*override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        self.layer.borderWidth = 0.7
+        self.layer.borderColor = UIColor.black.cgColor
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        
+        self.layer.borderWidth = 0.7
+        self.layer.borderColor = UIColor.black.cgColor
+    }*/
+
 }
 

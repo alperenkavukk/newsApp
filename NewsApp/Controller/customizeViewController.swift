@@ -11,11 +11,13 @@ class customizeViewController: UIViewController, UICollectionViewDelegate, UICol
     @IBOutlet weak var kullanbutton: UIButton!
    
     @IBOutlet weak var collectionView: UICollectionView!
-    var images = ["spor","bilim","finans","yazılım1","blueNews","signUp","signUp2","borsa","edebiyat","sanat","tarih","eğlence"]
-    var isim  =  ["Spor","Bilim","Finans","Yazılım","BlueNews","SignUp","SignUp2","Borsa","Edebiyat","Sanat","Tarih","Eğlence"]
+    var images = ["spor","teknoliji","bilim1","finans","yazılım1","siyaset","oyun","otomobil","borsa","edebiyat","sanat","tarih","eğlence"]
+    var isim  =  ["Spor","Teknoloji","Bilim","Finans","Yazılım","Siyaset","Oyun","Otomobil","Borsa","Edebiyat","Sanat","Tarih","Eğlence"]
     
     var newsData = [Article]()
     var data = [Article]()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
        
@@ -23,8 +25,14 @@ class customizeViewController: UIViewController, UICollectionViewDelegate, UICol
         collectionView.dataSource = self
         //getData()
         kullanbutton.layer.cornerRadius = 28
+        collectionView.allowsSelection = true
+        collectionView.allowsMultipleSelection = true
+        
         
     }
+    
+    
+    
     @IBAction func kullanButtonClicked(_ sender: Any) {
         performSegue(withIdentifier: "toKullanBarVc", sender: nil)
     }
@@ -42,7 +50,14 @@ class customizeViewController: UIViewController, UICollectionViewDelegate, UICol
     }
     
     
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            collectionView.cellForItem(at: indexPath)?.isSelected = true
+        }
+
+        // Hücre seçimi kaldırıldığında tetiklenir
+        func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+            collectionView.cellForItem(at: indexPath)?.isSelected = false
+        }
     
     /*
     

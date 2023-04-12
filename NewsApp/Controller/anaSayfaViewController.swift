@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import FirebaseFirestore
+import FirebaseAuth
 
 class anaSayfaViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     @IBOutlet weak var collectionview: UICollectionView!
@@ -14,8 +16,7 @@ class anaSayfaViewController: UIViewController, UICollectionViewDelegate, UIColl
     let images = ["news","blueNews","newsPaper","signUp","tabletNews"]
     let haberSitesi = ["hürriyet","milliyet","fanatik","fotomaç","sadads"]
     var haberData = [Article]()
-    
-    
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +25,7 @@ class anaSayfaViewController: UIViewController, UICollectionViewDelegate, UIColl
         collectionview.delegate = self
         collectionview.dataSource = self
         collectionview.reloadData()
+        navigationItem.title = "Home Page"
         
     }
     
@@ -49,7 +51,7 @@ class anaSayfaViewController: UIViewController, UICollectionViewDelegate, UIColl
         let oge = haberData[indexPath.row]
         cell.infoLabel.text = article.title
         cell.pauthercompany.text = article.author
-        cell.likeLabel.text = String("5")
+        cell.likeLabel.text = String("0")
         
         if let imageUrl = article.urlToImage {
               cell.image.downloaded(from: imageUrl)
@@ -71,19 +73,20 @@ class anaSayfaViewController: UIViewController, UICollectionViewDelegate, UIColl
                 cell.dateLabel.text = String(timeAgo)
             
         }
-
-
+       
+    
         
         return cell
     }
     
     
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
        /* if let cell = collectionView.cellForItem(at: indexPath) {
                cell.contentView.backgroundColor = UIColor.black
                cell.contentView.alpha = 0.5
            }*/
+        //selectedIndexPath = indexPath
         performSegue(withIdentifier: "toDestionVc", sender: indexPath)
         
     }

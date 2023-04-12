@@ -32,7 +32,8 @@ class loginViewController: UIViewController {
             Auth.auth().signIn(withEmail: emailtext.text!, password: passwordText.text!){
                 authdata , error in
                 if error != nil {
-                    self.makeAlert(titleInput: "Error!", messageInput: error?.localizedDescription ?? "error")
+                    let errorMessage = error?.localizedDescription
+                    self.makeAlert(titleInput: "Error!", messageInput:errorMessage ?? "")
                 }else{
                     
                     self.performSegue(withIdentifier: "totabBarVc", sender: nil)
@@ -51,11 +52,11 @@ class loginViewController: UIViewController {
     }
     
     
-    
-    func makeAlert(titleInput:String, messageInput:String) {
-               let alert = UIAlertController(title: titleInput, message: messageInput, preferredStyle: UIAlertController.Style.alert)
-               let okButton = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
-               alert.addAction(okButton)
-               alert.present(alert, animated: true, completion: nil)
-          }
+    func makeAlert(titleInput: String, messageInput: String) {
+        let alert = UIAlertController(title: titleInput, message: messageInput, preferredStyle: .alert)
+        let okButton = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(okButton)
+        self.present(alert, animated: true, completion: nil)
+    }
+
 }
