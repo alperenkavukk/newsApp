@@ -7,19 +7,26 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
+import SDWebImage
 class settingsViewController: UIViewController {
     
+    @IBOutlet weak var imageView: UIImageView!
     var headers = ["Account","More Features","Support"]
     var accounts = ["My Account","Change My Password"]
     var morefeatures = ["Profit&Loss","announcement"]
     var support = ["Privacy Policy","Terms And Condition","LogOut"]
+    var imageArray = [String]()
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
-   
+        
         tableView.sectionHeaderTopPadding = 0
         registerTableCells()
+        getDataFromFirestore()
+        imageView.layer.cornerRadius = imageView.frame.size.width / 4
+        imageView.clipsToBounds = true
         
     }
     
@@ -28,7 +35,49 @@ class settingsViewController: UIViewController {
         tableView.register(UINib(nibName: "headerTitleCell", bundle: nil), forCellReuseIdentifier: "headerTitleCell")
         
     }
+    
+    
+    
+
+    public func getDataFromFirestore(){
+           let db = Firestore.firestore()
+           let userRef = db.collection("Posts")
+           let query = userRef.whereField("postedBy", in: [Auth.auth().currentUser?.email!])
+           query.addSnapshotListener {  snapshot, error in
+             if error != nil
+                 {
+                 print("error11")
+             }
+                 else
+                 {
+                     if snapshot?.isEmpty != true && snapshot != nil
+                     {
+                        
+                         for document in  snapshot!.documents {
+                             
+                             let documentId = document.documentID
+                             let data = document.data()
+                             let imgurl = data["imageUrl"] as? String ?? ""
+                             self.imageView.sd_setImage(with: URL(string: imgurl))
+                         }
+                       
+
+                        
+                     }
+                    
+                     }
+             
+         }
+
+     }
+
+    
 }
+
+
+
+
+
 
 extension settingsViewController: UITableViewDelegate, UITableViewDataSource{
     func numberOfSections(in tableView: UITableView) -> Int {

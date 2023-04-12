@@ -186,6 +186,10 @@ class NewsInfoViewController: UIViewController {
             }
             self.present(activityViewController, animated: true, completion: nil)
     }
+    
+    
+    
+    
     @IBAction func saveNewsButtonClicked(_ sender: Any) {
         
         let db = Firestore.firestore()

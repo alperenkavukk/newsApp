@@ -686,6 +686,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Settings" image="wrench.and.screwdriver.fill" catalog="system" id="f6a-C3-L63"/>
                     <connections>
+                        <outlet property="imageView" destination="ito-hk-6ox" id="0vB-a8-ZNB"/>
                         <outlet property="tableView" destination="9hH-GY-hBs" id="xsR-u6-Da9"/>
                         <segue destination="3J3-p0-iyz" kind="show" identifier="toChangepassword" id="Y5N-Fe-bIf"/>
                     </connections>
